@@ -27,11 +27,12 @@ jobs:
       - name: Build
         run: |
           make build
+
       - name: Upload build result main
         uses: actions/upload-artifact@v1
         with:
           name: main_server
-          path: ./build/main_api
+          path: ./build/api_server
 
   deploy:
     runs-on: ubuntu-latest
