@@ -1,0 +1,64 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+
+jobs:
+  delete-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          expire-in: 0days
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.x
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          make build
+      - name: Upload build result main
+        uses: actions/upload-artifact@v1
+        with:
+          name: main_server
+          path: ./build/main_api
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download bin file api
+        uses: actions/download-artifact@v1
+        with:
+          name: main
+
+      - name: Transfer bin api file to server
+        uses: appleboy/scp-action@master
+        with:
+          port: 22
+          host: 87.242.127.254
+          username: root
+          password: ${{ secrets.PASSWORD }}
+          source: "main_server"
+          target: "/home/VDNX/build"
+
+      - name: chmod
+        uses: appleboy/ssh-action@master
+        with:
+          host: 87.242.127.254
+          username: root
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            chmod -R 755 /home/VDNX/build/main_api/main
+            sudo service sanviteam restart
