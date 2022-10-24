@@ -7,7 +7,7 @@ import (
 
 func main() {
 	e := echo.New()
-	e.GET("/hello", func(c echo.Context) error {
+	e.GET("hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.Logger.Fatal(e.Start("localhost:8091"))
