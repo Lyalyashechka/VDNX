@@ -51,7 +51,7 @@ jobs:
           host: 87.242.127.254
           username: root
           password: ${{ secrets.PASSWORD }}
-          source: "main_server"
+          source: "main_api"
           target: "/home/VDNX/build"
 
       - name: chmod
