@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Lyalyashechka/VDNX/config"
+	"github.com/Lyalyashechka/VDNX/config/config_middleware"
 	"github.com/Lyalyashechka/VDNX/config/config_routing"
 	"github.com/Lyalyashechka/VDNX/internal/pkg/postgres"
 	tools_logger "github.com/Lyalyashechka/VDNX/internal/pkg/tools/logger"
@@ -33,6 +34,8 @@ func main() {
 	configRouting := config_routing.ServerConfigRouting{
 		UploadHandler: uploadHandler,
 	}
+
+	config_middleware.ConfigMiddleware(router)
 	configRouting.ConfigRouting(router)
 
 	router.GET("hello", func(c echo.Context) error {
