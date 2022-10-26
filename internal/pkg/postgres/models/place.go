@@ -16,7 +16,7 @@ type Place struct {
 	Color       string          `gorm:"column:color"`
 	ColorCode   string          `gorm:"column:color_code"`
 	PreviewText string          `gorm:"column:preview_text"`
-	DefaultText string          `gorm:"column:default_text"`
+	DetailText  string          `gorm:"column:detail_text"`
 	Title       string          `gorm:"column:title"`
 	Time        string          `gorm:"column:time_work"`
 	Type        string          `gorm:"column:type_place"`

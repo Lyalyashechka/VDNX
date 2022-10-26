@@ -24,7 +24,7 @@ func (p *Postgres) Create(ctx context.Context, place models.Place) error {
 			Color:       place.Color,
 			ColorCode:   place.ColorCode,
 			PreviewText: place.PreviewText,
-			DefaultText: place.DefaultText,
+			DetailText:  place.DetailText,
 			Title:       place.Title,
 			Time:        place.Time,
 			Type:        place.Type,

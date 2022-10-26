@@ -1,30 +1,25 @@
-create table places (
-                        id serial primary key,
-                        type_place varchar(256),
-                        order_place int,
-                        geometry_type varchar(256),
-                        coordinates float[]
-)
+drop table places cascade;
 
-create table property_place (
-                                id serial primary key,
-                                place_id int references places(id),
-                                cat varchar(256),
-                                visibility varchar(256),
-                                zoom int,
-                                order_place varchar(256),
-                                color varchar(256),
-                                color_code varchar(256),
-                                show_title text,
-                                map_title text,
-                                exclude_place bool,
-                                title text,
-                                type_place varchar(256),
-                                map_icon int,
-                                url varchar(256),
-                                pic varchar(256),
-                                coordinates float[],
-                                attractions int[],
-                                visible bool,
-                                active bool
-)
+create table places (
+                        id serial    primary key,
+                        qr 			 varchar(256),
+                        order_place  int,
+                        coordinates  float[],
+                        facilities   text[],
+                        video_route  varchar(256),
+                        tickets_link varchar(256),
+                        tickets_text text,
+                        cat          varchar(256),
+                        visibility   varchar(256),
+                        color        varchar(256),
+                        color_code   varchar(256),
+                        preview_text text,
+                        detail_text  text,
+                        title        varchar(256),
+                        time_work    varchar(256),
+                        type_place   varchar(256),
+                        url          varchar(256),
+                        pic          varchar(256),
+                        code         varchar(256)
+);
+
