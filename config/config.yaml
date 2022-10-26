@@ -1,6 +1,6 @@
 postgres:
   host: localhost
   port: 5432
-  dbname: vdnh
+  dbname: vdnx
   user: postgres
   password: 1234

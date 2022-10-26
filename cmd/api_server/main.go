@@ -4,10 +4,11 @@ import (
 	"github.com/Lyalyashechka/VDNX/config"
 	"github.com/Lyalyashechka/VDNX/config/config_middleware"
 	"github.com/Lyalyashechka/VDNX/config/config_routing"
+	place_repository "github.com/Lyalyashechka/VDNX/internal/pkg/place/repository/postgres"
 	"github.com/Lyalyashechka/VDNX/internal/pkg/postgres"
 	tools_logger "github.com/Lyalyashechka/VDNX/internal/pkg/tools/logger"
 	upload_handler "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/handler/http"
-	upload_repository "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/repository/postgres"
+	upload_usecase "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/usecase"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -28,8 +29,10 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	uploadRepository := upload_repository.New(db, logger)
-	uploadHandler := upload_handler.New(logger, db, uploadRepository)
+	placeRepository := place_repository.New(db, logger)
+
+	uploadUseCase := upload_usecase.New(logger, placeRepository)
+	uploadHandler := upload_handler.New(logger, db, uploadUseCase)
 
 	configRouting := config_routing.ServerConfigRouting{
 		UploadHandler: uploadHandler,

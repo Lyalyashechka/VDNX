@@ -1,4 +1,4 @@
-package upload_data
+package place
 
 import (
 	"context"
@@ -6,5 +6,5 @@ import (
 )
 
 type Repository interface {
-	UploadPlaces(ctx context.Context, places []models.Place) error
+	Create(ctx context.Context, place models.Place) error
 }

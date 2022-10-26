@@ -3,7 +3,7 @@ package http
 import (
 	"encoding/json"
 	"github.com/Lyalyashechka/VDNX/internal/pkg/models"
-	repository "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data"
+	upload_data "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data"
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
 	"github.com/sirupsen/logrus"
@@ -13,16 +13,16 @@ import (
 )
 
 type UploadHandler struct {
-	repository repository.Repository
-	logger     *logrus.Logger
-	db         *gorm.DB
+	useCase upload_data.UseCase
+	logger  *logrus.Logger
+	db      *gorm.DB
 }
 
-func New(logger *logrus.Logger, db *gorm.DB, repository repository.Repository) *UploadHandler {
+func New(logger *logrus.Logger, db *gorm.DB, useCase upload_data.UseCase) *UploadHandler {
 	return &UploadHandler{
-		repository: repository,
-		logger:     logger,
-		db:         db,
+		useCase: useCase,
+		logger:  logger,
+		db:      db,
 	}
 }
 
@@ -46,6 +46,12 @@ func (uh *UploadHandler) UploadPlaces(ctx echo.Context) error {
 		var place models.Place
 		mapstructure.Decode(v, &place)
 		places = append(places, place)
+	}
+
+	err = uh.useCase.CreatePlaces(ctx.Request().Context(), places)
+	if err != nil {
+		uh.logger.WithError(err).Errorf("[UploadPlaces] error create place")
+		return ctx.NoContent(http.StatusInternalServerError)
 	}
 
 	return ctx.NoContent(http.StatusOK)
