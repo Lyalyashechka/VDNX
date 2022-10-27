@@ -8,27 +8,24 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 )
 
-type UploadHandler struct {
+type Handler struct {
 	useCase upload_data.UseCase
 	logger  *logrus.Logger
-	db      *gorm.DB
 }
 
-func New(logger *logrus.Logger, db *gorm.DB, useCase upload_data.UseCase) *UploadHandler {
-	return &UploadHandler{
+func New(logger *logrus.Logger, useCase upload_data.UseCase) *Handler {
+	return &Handler{
 		useCase: useCase,
 		logger:  logger,
-		db:      db,
 	}
 }
 
-func (uh *UploadHandler) UploadPlaces(ctx echo.Context) error {
+func (uh *Handler) UploadPlaces(ctx echo.Context) error {
 	body, err := ioutil.ReadAll(ctx.Request().Body)
 	if err != nil {
 		uh.logger.WithError(err).Errorf("[UploadPlaces] error readAll")

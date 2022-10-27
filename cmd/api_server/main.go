@@ -4,10 +4,12 @@ import (
 	"github.com/Lyalyashechka/VDNX/config"
 	"github.com/Lyalyashechka/VDNX/config/config_middleware"
 	"github.com/Lyalyashechka/VDNX/config/config_routing"
+	place_hanlder "github.com/Lyalyashechka/VDNX/internal/pkg/place/delivery/http"
 	place_repository "github.com/Lyalyashechka/VDNX/internal/pkg/place/repository/postgres"
+	place_usecase "github.com/Lyalyashechka/VDNX/internal/pkg/place/usecase"
 	"github.com/Lyalyashechka/VDNX/internal/pkg/postgres"
 	tools_logger "github.com/Lyalyashechka/VDNX/internal/pkg/tools/logger"
-	upload_handler "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/handler/http"
+	upload_handler "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/delivery/http"
 	upload_usecase "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data/usecase"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -30,12 +32,15 @@ func main() {
 	}
 
 	placeRepository := place_repository.New(db, logger)
+	placeUseCase := place_usecase.New(logger, placeRepository)
+	placeHandler := place_hanlder.New(logger, placeUseCase)
 
 	uploadUseCase := upload_usecase.New(logger, placeRepository)
-	uploadHandler := upload_handler.New(logger, db, uploadUseCase)
+	uploadHandler := upload_handler.New(logger, uploadUseCase)
 
 	configRouting := config_routing.ServerConfigRouting{
 		UploadHandler: uploadHandler,
+		PlaceHandler:  placeHandler,
 	}
 
 	config_middleware.ConfigMiddleware(router)

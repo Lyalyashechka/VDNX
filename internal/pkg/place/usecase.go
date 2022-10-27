@@ -1,1 +1,14 @@
 package place
+
+import (
+	"context"
+	"github.com/Lyalyashechka/VDNX/internal/pkg/models"
+)
+
+type GetAllPlacesParam struct {
+	IsEvent models.Bool
+}
+
+type UseCase interface {
+	GetAllPlaces(ctx context.Context, param GetAllPlacesParam) ([]models.Place, error)
+}
