@@ -20,6 +20,12 @@ create table places (
                         type_place   varchar(256),
                         url          varchar(256),
                         pic          varchar(256),
-                        code         varchar(256)
+                        code         varchar(256),
+                        is_event	 bool
 );
 
+create table place_event_sharing (
+                        id serial primary key,
+                        place_id int references places(id),
+                        event_id int references places(id)
+);

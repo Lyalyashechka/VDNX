@@ -6,6 +6,7 @@ import (
 	db_models "github.com/Lyalyashechka/VDNX/internal/pkg/postgres/models"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 func (p *Postgres) Create(ctx context.Context, place models.Place) error {
@@ -31,11 +32,31 @@ func (p *Postgres) Create(ctx context.Context, place models.Place) error {
 			Url:         place.Url,
 			Pic:         place.Pic,
 			Code:        place.Code,
+			IsEvent:     place.IsEvent,
 		}
 
 		res := p.db.Table("places").Create(&dbPlace)
 		if err := res.Error; err != nil {
 			return errors.Wrapf(err, "failed to create place")
+		}
+
+		if dbPlace.IsEvent {
+			for _, v := range place.Places {
+				placeId, err := strconv.Atoi(v)
+				if err != nil {
+					return errors.Wrapf(err, "failed convert place id to int")
+				}
+
+				dbPlaceEventSharing := db_models.PlaceEventSharing{
+					EventId: dbPlace.Id,
+					PlaceId: placeId,
+				}
+				res = p.db.Create(&dbPlaceEventSharing)
+				if err := res.Error; err != nil {
+					return errors.Wrap(err, "failed to create place event sharing")
+				}
+			}
+
 		}
 
 		return nil

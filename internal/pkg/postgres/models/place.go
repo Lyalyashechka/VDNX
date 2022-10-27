@@ -23,8 +23,19 @@ type Place struct {
 	Url         string          `gorm:"column:url"`
 	Pic         string          `gorm:"column:pic"`
 	Code        string          `gorm:"column:code"`
+	IsEvent     bool            `gorm:"column:is_event"`
 }
 
 func (Place) TableName() string {
 	return "places"
+}
+
+type PlaceEventSharing struct {
+	Id      int `gorm:"column:id"`
+	PlaceId int `gorm:"column:place_id"`
+	EventId int `gorm:"column:event_id"`
+}
+
+func (PlaceEventSharing) TableName() string {
+	return "place_event_sharing"
 }

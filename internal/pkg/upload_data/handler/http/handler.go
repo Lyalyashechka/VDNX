@@ -6,10 +6,12 @@ import (
 	upload_data "github.com/Lyalyashechka/VDNX/internal/pkg/upload_data"
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type UploadHandler struct {
@@ -40,11 +42,22 @@ func (uh *UploadHandler) UploadPlaces(ctx echo.Context) error {
 		return ctx.NoContent(http.StatusBadRequest)
 	}
 
+	var isEvent bool
+	isEventString := ctx.QueryParam("is_event")
+	if isEventString != "" {
+		isEvent, err = strconv.ParseBool(isEventString)
+		if err != nil {
+			uh.logger.WithError(errors.Wrap(err, "failed to parse event param"))
+			return ctx.JSON(http.StatusBadRequest, err.Error())
+		}
+	}
+
 	var places []models.Place
 	jsonMap := jsonResp.(map[string]interface{})
 	for _, v := range jsonMap {
 		var place models.Place
 		mapstructure.Decode(v, &place)
+		place.IsEvent = isEvent
 		places = append(places, place)
 	}
 

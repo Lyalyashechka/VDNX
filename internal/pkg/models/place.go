@@ -15,7 +15,7 @@ type Place struct {
 	Cat         string          `json:"cat,omitempty" mapstructure:"cat"`
 	Visibility  string          `json:"visibility,omitempty" mapstructure:"visibility"`
 	Color       string          `json:"color,omitempty" mapstructure:"color"`
-	ColorCode   string          `json:"color_code" mapstructure:"color_code"`
+	ColorCode   string          `json:"color_code,omitempty" mapstructure:"color_code"`
 	PreviewText string          `json:"preview_text,omitempty" mapstructure:"preview_text"`
 	DetailText  string          `json:"default_text,omitempty" mapstructure:"detail_text"`
 	Title       string          `json:"title,omitempty" mapstructure:"title"`
@@ -24,6 +24,8 @@ type Place struct {
 	Url         string          `json:"url,omitempty" mapstructure:"url"`
 	Pic         string          `json:"pic,omitempty" mapstructure:"pic"`
 	Code        string          `json:"code,omitempty" mapstructure:"code"`
+	Places      []string        `json:"places,omitempty" mapstructure:"places"`
+	IsEvent     bool            `json:"is_event"`
 }
 
 type SchedulePlace struct {
