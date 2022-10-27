@@ -11,4 +11,5 @@ type GetAllPlacesParam struct {
 
 type UseCase interface {
 	GetAllPlaces(ctx context.Context, param GetAllPlacesParam) ([]models.Place, error)
+	GetPlaceById(ctx context.Context, id int) (models.Place, error)
 }

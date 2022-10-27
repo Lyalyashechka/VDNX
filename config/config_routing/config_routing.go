@@ -14,4 +14,5 @@ type ServerConfigRouting struct {
 func (cr *ServerConfigRouting) ConfigRouting(router *echo.Echo) {
 	router.POST("api/upload/places", cr.UploadHandler.UploadPlaces)
 	router.GET("api/places/get", cr.PlaceHandler.GetAllPlaces)
+	router.GET("api/places/get/:id", cr.PlaceHandler.GetPlaceById)
 }

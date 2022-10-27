@@ -33,7 +33,7 @@ func (ph *Handler) GetAllPlaces(ctx echo.Context) error {
 		}
 		getAllPlacesParam.IsEvent = models.DefinedBool(isEvent)
 	}
-	
+
 	places, err := ph.useCase.GetAllPlaces(ctx.Request().Context(), getAllPlacesParam)
 	if err != nil {
 		ph.logger.WithError(err).Errorf("[GetAllPlaces] error usecase")
@@ -41,4 +41,21 @@ func (ph *Handler) GetAllPlaces(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, places)
+}
+
+func (ph *Handler) GetPlaceById(ctx echo.Context) error {
+	idString := ctx.Param("id")
+	idInt, err := strconv.Atoi(idString)
+	if err != nil {
+		ph.logger.WithError(err).Errorf("[GetPlaceById] Faile parse event id")
+		return ctx.NoContent(http.StatusBadRequest)
+	}
+
+	place, err := ph.useCase.GetPlaceById(ctx.Request().Context(), idInt)
+	if err != nil {
+		ph.logger.WithError(err).Errorf("[GetPlaceById] error in useCase")
+		return ctx.NoContent(http.StatusInternalServerError)
+	}
+
+	return ctx.JSON(http.StatusOK, place)
 }
