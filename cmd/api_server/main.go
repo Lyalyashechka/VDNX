@@ -41,7 +41,7 @@ func main() {
 	uploadUseCase := upload_usecase.New(logger, placeRepository)
 	uploadHandler := upload_handler.New(logger, uploadUseCase)
 
-	dsManager := data_science_handler.New("localhost:5000")
+	dsManager := data_science_handler.New("http://127.0.0.1:5000")
 	routeUseCase := routes_usecase.New(dsManager, logger)
 	routeHandler := routes_handler.New(logger, routeUseCase, placeUseCase)
 

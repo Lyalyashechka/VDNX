@@ -8,6 +8,10 @@ import (
 	"net/http"
 )
 
+const (
+	PERSONAL_ROUTES = "/routes/personal"
+)
+
 type DataScienceServerHandler struct {
 	Address string
 	logger  *logrus.Logger
@@ -26,7 +30,7 @@ func (h *DataScienceServerHandler) GetPersonalRoutes(route models.PersonInfoRout
 		return models.Routes{}, err
 	}
 
-	resp, err := http.Post(h.Address, "application/json", bytes.NewBuffer(jsonMarshal))
+	resp, err := http.Post(h.Address+PERSONAL_ROUTES, "application/json", bytes.NewBuffer(jsonMarshal))
 	if err != nil {
 		h.logger.WithError(err).Errorf("[GetPersonalRoutes] error make request")
 		return models.Routes{}, err

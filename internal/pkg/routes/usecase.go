@@ -6,5 +6,5 @@ import (
 )
 
 type UseCase interface {
-	GetPersonalRoutes(ctx context.Context) (models.Routes, error)
+	GetPersonalRoutes(ctx context.Context, personalInfo models.PersonInfoRoute) (models.Routes, error)
 }
