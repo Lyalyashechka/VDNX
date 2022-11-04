@@ -1,7 +1,7 @@
 package models
 
 type Route struct {
-	Places []Place
+	Places []Place `json:"places"`
 }
 
 type Routes struct {
