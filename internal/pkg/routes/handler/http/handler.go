@@ -24,18 +24,18 @@ func New(logger *logrus.Logger, useCaseRoute routes.UseCase, useCasePlaces place
 }
 
 func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
-	personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), models.PersonInfoRoute{
-		With:      "Компанией",
-		Children:  true,
-		Interests: []string{"Павильон"},
-		Transport: "Пешком",
-		Time:      "2h",
-	})
-	if err != nil {
-		h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
-	h.logger.Info(personalRoutes1)
+	//personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), models.PersonInfoRoute{
+	//	With:      "Компанией",
+	//	Children:  true,
+	//	Interests: []string{"Павильон"},
+	//	Transport: "Пешком",
+	//	Time:      "2h",
+	//})
+	//if err != nil {
+	//	h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
+	//	return ctx.JSON(http.StatusInternalServerError, err)
+	//}
+	//h.logger.Info(personalRoutes1)
 
 	place1, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 331)
 	place2, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 3261)
