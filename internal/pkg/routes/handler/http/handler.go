@@ -75,7 +75,6 @@ func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
 		h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
-	h.logger.Info(personalRoutes1)
 
 	return ctx.JSON(http.StatusOK, personalRoutes1)
 }
