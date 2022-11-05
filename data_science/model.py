@@ -122,10 +122,11 @@ class RouteModel:
         route_list = self.get_routes_raw()
         final = []
         for i, route in enumerate(route_list):
-            route['json'] = route.apply(lambda x: x.to_json(), axis=1)
             route.drop(columns=['vector_text', 'vector_title',
                                 'time_flag', 'distance_vector_title', 'distance_vector_text',
                                 'distance_coordinates', 'distance'], inplace=True)
+            route['json'] = route.apply(lambda x: json.loads(x.to_json()), axis=1)
+
             final.append({
                 'id': str(i),
                 'main': self.get_main_points_sorted(route.loc[route['rating'] <= 2000]),
