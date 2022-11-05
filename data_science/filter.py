@@ -21,13 +21,11 @@ class Filtering:
         if x is np.nan:
             return 1
 
-        # time_stamp = datetime.today()
-        time_stamp = datetime(2022, 11, 5, 15, 17, 8, 132263)
+        time_stamp = datetime.today()
+        # time_stamp = datetime(2022, 11, 5, 15, 17, 8, 132263)
         weekday = time_stamp.weekday()
         work_schedule = list(eval(x).values())[weekday]
-        if len(work_schedule) == 0:
-            return 0
-        if work_schedule is np.nan:
+        if len(work_schedule) == 0 or work_schedule is np.nan:
             return 0
 
         open_hour_minute = work_schedule[:5]
@@ -50,6 +48,7 @@ class Filtering:
             self.df = self.df.loc[self.df['animals_flag'] == 1]
         if self.answer['kids'] == 1:
             self.df = self.df.loc[self.df['children_flag'] == 1]
+
         if self.answer['transport'] == 'Общественный транспорт':
             self.df = self.df.loc[self.df['electrobus_flag'] == 1]
 
