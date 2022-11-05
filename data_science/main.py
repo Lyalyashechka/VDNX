@@ -1,9 +1,9 @@
 import pandas.io.sql as psql
 import psycopg2
 
-from model import RouteModel
+from model import RouteModel, NpEncoder
 from filter import Filtering
-from flask import Flask, request
+from flask import Flask, request, json, jsonify
 
 
 class DB:
@@ -36,8 +36,7 @@ def hello():
 
     model = RouteModel(selected_df, df, answer)
     routes = model.get_routes()
-    print(routes)
-    return routes
+    return json.dumps({"routes": routes}, cls=NpEncoder)
 
 
 if __name__ == "__main__":
