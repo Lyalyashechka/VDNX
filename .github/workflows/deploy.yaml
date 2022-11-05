@@ -63,3 +63,4 @@ jobs:
           script: |
             chmod -R 755 /home/VDNX/build/main_api/main
             sudo service sanviteam restart
+            sudo service sanviteampython restart
