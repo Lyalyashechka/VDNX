@@ -55,7 +55,7 @@ class RouteModel:
         distance_coef = 10
 
         if self.answer['transport'] in ['Велосипед', 'Общественный транспорт']:
-            distance_coef = 0
+            distance_coef = 0.2
 
         elif self.answer['transport'] == 'Самокат':
             distance_coef = 0.5
@@ -94,14 +94,19 @@ class RouteModel:
         raw_routes = []
         tmp = self.filtered.copy()
 
+        if self.answer['transport'] == 'Велосипед':
+            n_points = [10]
+        elif self.answer['animals'] == 1:
+            n_points = [8]
+        else:
+            n_points = [3, 4, 5]
+
         while len(raw_routes) < 3:
 
-            if tmp.shape[0] >= 10:
-                n_points = 4
-            else:
-                n_points = 3
+            if tmp.shape[0] < max(n_points) // 2:
+                break
 
-            full_route = self.get_route(tmp, n_points=n_points)
+            full_route = self.get_route(tmp, n_points=np.random.choice(n_points))
 
             raw_routes.append(full_route)
             tmp = tmp[~tmp['id'].isin(
@@ -122,15 +127,24 @@ class RouteModel:
         route_list = self.get_routes_raw()
         final = []
         for i, route in enumerate(route_list):
-            route['json'] = route.apply(lambda x: x.to_json(), axis=1)
+
+            if self.answer['transport'] == 'Велосипед' or self.answer['animals'] == 1:
+                duration = route.loc[(route['rating'] <= 2000) &
+                                     (~route['type_place'].isin(['Детская площадка', 'Зеленая зона']))].shape[0] * 5 + \
+                           route.loc[route['type_place'].isin(['Детская площадка', 'Зеленая зона'])]['duration'].sum()
+            else:
+                duration = route['duration'].sum()
+
             route.drop(columns=['vector_text', 'vector_title',
                                 'time_flag', 'distance_vector_title', 'distance_vector_text',
                                 'distance_coordinates', 'distance'], inplace=True)
+            route['json'] = route.apply(lambda x: json.loads(x.to_json()), axis=1)
+
             final.append({
                 'id': str(i),
                 'main': self.get_main_points_sorted(route.loc[route['rating'] <= 2000]),
                 'sup_points': route.loc[route['rating'] > 2000]['json'].values,
-                'duration': route['duration'].sum()
+                'duration': duration
             }
             )
 

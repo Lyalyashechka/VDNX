@@ -26,11 +26,11 @@ app = Flask(__name__)
 
 @app.route("/routes/personal")
 def hello():
-    answer = {'with': 'Один',
-              'animals': 0,
-              'kids': 0,
-              'interests': ['nature', 'tech'],
-              'transport': 'Пешком'
+    answer = {'with': 'Компанией',
+              'animals': 1,
+              'kids': 1,
+              'interests': ['promenade'],
+              'transport': 'Общественный транспорт'
               }
 
     df = db.get_df()
@@ -40,6 +40,8 @@ def hello():
 
     model = RouteModel(selected_df, df, answer)
     res = model.get_routes()
+
+    print(res)
 
     return res
 
