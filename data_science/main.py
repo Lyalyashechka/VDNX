@@ -29,10 +29,8 @@ def hello():
     answer = {'with': 'Один',
               'animals': 0,
               'kids': 0,
-              'interests': ['activity', 'nature', 'science', 'national', 'workshop',
-                            'creation', 'kids', 'tech', 'about_russia'],
-              'transport': 'Пешком',
-              'position': [55.8262103, 37.63772804]
+              'interests': ['nature', 'tech'],
+              'transport': 'Пешком'
               }
 
     df = db.get_df()
@@ -41,8 +39,9 @@ def hello():
     selected_df = my_filter.get_dataframe()
 
     model = RouteModel(selected_df, df, answer)
+    res = model.get_routes()
 
-    return model.get_routes()
+    return res
 
 
 if __name__ == "__main__":

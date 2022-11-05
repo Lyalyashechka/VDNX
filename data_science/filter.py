@@ -21,8 +21,8 @@ class Filtering:
         if x is np.nan:
             return 1
 
-        time_stamp = datetime.today()
-        # time_stamp = datetime(2022, 11, 5, 15, 17, 8, 132263)
+        # time_stamp = datetime.today()
+        time_stamp = datetime(2022, 11, 5, 15, 17, 8, 132263)
         weekday = time_stamp.weekday()
         work_schedule = list(eval(x).values())[weekday]
         if len(work_schedule) == 0 or work_schedule is np.nan:

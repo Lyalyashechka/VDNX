@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from scipy.spatial import distance
+
 warnings.filterwarnings("ignore")
 
 
@@ -111,22 +112,26 @@ class RouteModel:
     def get_main_points_sorted(self, df):
 
         df['my_distance'] = df['coordinates'].apply(
-            lambda x: distance.cosine(x, self.answer['position']))
+            lambda x: distance.cosine(x, [55.8262103, 37.63772804]))
         df.sort_values(by='my_distance', inplace=True)
 
-        return list(df['id'].values)
+        return df['json'].values
 
     def get_routes(self):
 
         route_list = self.get_routes_raw()
         final = []
         for i, route in enumerate(route_list):
+            route['json'] = route.apply(lambda x: x.to_json(), axis=1)
+            route.drop(columns=['vector_text', 'vector_title',
+                                'time_flag', 'distance_vector_title', 'distance_vector_text',
+                                'distance_coordinates', 'distance'], inplace=True)
             final.append({
                 'id': str(i),
                 'main': self.get_main_points_sorted(route.loc[route['rating'] <= 2000]),
-                'sup_points': list(route.loc[route['rating'] > 2000]['id'].values),
+                'sup_points': route.loc[route['rating'] > 2000]['json'].values,
                 'duration': route['duration'].sum()
             }
             )
 
-        return json.dumps(final, indent=1, cls=NpEncoder)
+        return json.dumps(final, indent=4, cls=NpEncoder)
