@@ -24,6 +24,27 @@ func New(logger *logrus.Logger, useCaseRoute routes.UseCase, useCasePlaces place
 }
 
 func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
+	//var param usecase.GetPersonalRoutesParam
+	//
+	//with := ctx.QueryParam("with")
+	//param.With = with
+	//
+	//transport := ctx.QueryParam("transport")
+	//param.Transport = transport
+	//
+	//isAdminString := ctx.QueryParam("is_admin")
+	//if isAdminString != "" {
+	//	isAdmin, err := strconv.ParseBool(isAdminString)
+	//	if err != nil {
+	//		eh.logger.WithError(errors.Wrap(err, "failed to parse owner param")).
+	//			Errorf("failed to get user events")
+	//
+	//		return ctx.JSON(http.StatusBadRequest, err.Error())
+	//	}
+	//
+	//	eventParams.IsAdmin = models.DefinedBool(isAdmin)
+	//}
+
 	//personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), models.PersonInfoRoute{
 	//	With:      "Компанией",
 	//	Children:  true,

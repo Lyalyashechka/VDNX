@@ -8,6 +8,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type GetPersonalRoutesParam struct {
+	With      string
+	Animals   int
+	Kids      int
+	Interests []string
+	Transport string
+	Position  []float64
+}
+
 type UseCase struct {
 	DsManager *http.DataScienceServerHandler
 	logger    *logrus.Logger
