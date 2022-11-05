@@ -1,5 +1,3 @@
-import json
-import pandas as pd
 import pandas.io.sql as psql
 import psycopg2
 from model import RouteModel
