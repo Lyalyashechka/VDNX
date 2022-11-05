@@ -41,8 +41,6 @@ def hello():
     model = RouteModel(selected_df, df, answer)
     res = model.get_routes()
 
-    print(res)
-
     return res
 
 
