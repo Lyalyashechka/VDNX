@@ -29,11 +29,11 @@ func New(dsManager *http.DataScienceServerHandler, logger *logrus.Logger) routes
 	}
 }
 
-func (uc *UseCase) GetPersonalRoutes(ctx context.Context, personalInfo models.PersonInfoRoute) (models.Routes, error) {
+func (uc *UseCase) GetPersonalRoutes(ctx context.Context, personalInfo models.PersonInfoRoute) (map[string]interface{}, error) {
 	personalRoutes, err := uc.DsManager.GetPersonalRoutes(personalInfo)
 	if err != nil {
 		uc.logger.WithError(err).Errorf("[GetPersonalRoutes] uc")
-		return models.Routes{}, nil
+		return nil, nil
 	}
 	return personalRoutes, nil
 }

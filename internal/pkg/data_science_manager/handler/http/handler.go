@@ -23,26 +23,26 @@ func New(address string) *DataScienceServerHandler {
 	}
 }
 
-func (h *DataScienceServerHandler) GetPersonalRoutes(route models.PersonInfoRoute) (models.Routes, error) {
+func (h *DataScienceServerHandler) GetPersonalRoutes(route models.PersonInfoRoute) (map[string]interface{}, error) {
 	jsonMarshal, err := json.Marshal(route)
 	if err != nil {
 		h.logger.WithError(err).Errorf("[GetPersonalRoutes] error marshal json")
-		return models.Routes{}, err
+		return nil, err
 	}
 
 	resp, err := http.Post(h.Address+PERSONAL_ROUTES, "application/json", bytes.NewBuffer(jsonMarshal))
 	if err != nil {
 		h.logger.WithError(err).Errorf("[GetPersonalRoutes] error make request")
-		return models.Routes{}, err
+		return nil, err
 	}
 
-	var personalRoutes models.Routes
+	var answer map[string]interface{}
 
-	err = json.NewDecoder(resp.Body).Decode(&personalRoutes)
+	err = json.NewDecoder(resp.Body).Decode(&answer)
 	if err != nil {
 		h.logger.WithError(err).Errorf("[GetPersonalRoutes] error decode request")
-		return models.Routes{}, err
+		return nil, err
 	}
 
-	return personalRoutes, nil
+	return answer, nil
 }

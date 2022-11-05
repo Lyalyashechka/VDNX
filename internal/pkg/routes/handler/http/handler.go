@@ -5,8 +5,11 @@ import (
 	"github.com/Lyalyashechka/VDNX/internal/pkg/place"
 	"github.com/Lyalyashechka/VDNX/internal/pkg/routes"
 	"github.com/labstack/echo/v4"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type Handler struct {
@@ -24,78 +27,55 @@ func New(logger *logrus.Logger, useCaseRoute routes.UseCase, useCasePlaces place
 }
 
 func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
-	//var param usecase.GetPersonalRoutesParam
-	//
-	//with := ctx.QueryParam("with")
-	//param.With = with
-	//
-	//transport := ctx.QueryParam("transport")
-	//param.Transport = transport
-	//
-	//isAdminString := ctx.QueryParam("is_admin")
-	//if isAdminString != "" {
-	//	isAdmin, err := strconv.ParseBool(isAdminString)
-	//	if err != nil {
-	//		eh.logger.WithError(errors.Wrap(err, "failed to parse owner param")).
-	//			Errorf("failed to get user events")
-	//
-	//		return ctx.JSON(http.StatusBadRequest, err.Error())
-	//	}
-	//
-	//	eventParams.IsAdmin = models.DefinedBool(isAdmin)
-	//}
+	var param models.PersonInfoRoute
 
-	//personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), models.PersonInfoRoute{
-	//	With:      "Компанией",
-	//	Children:  true,
-	//	Interests: []string{"Павильон"},
-	//	Transport: "Пешком",
-	//	Time:      "2h",
-	//})
-	//if err != nil {
-	//	h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
-	//	return ctx.JSON(http.StatusInternalServerError, err)
-	//}
-	//h.logger.Info(personalRoutes1)
+	with := ctx.QueryParam("with")
+	param.With = with
 
-	place1, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 331)
-	place2, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 3261)
-	place3, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 14682)
-	place4, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 329)
+	transport := ctx.QueryParam("transport")
+	param.Transport = transport
 
-	var route1 models.Route
-	route1.Places = append(route1.Places, place1)
-	route1.Places = append(route1.Places, place2)
-	route1.Places = append(route1.Places, place3)
-	route1.Places = append(route1.Places, place4)
+	animals := ctx.QueryParam("animals")
+	if animals != "" {
+		isHaveAnimals, err := strconv.ParseBool(animals)
+		if err != nil {
+			h.logger.WithError(errors.Wrap(err, "failed to parse owner param")).
+				Errorf("failed to get user events")
 
-	place5, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 412)
-	place6, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 2271)
-	place7, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 6780)
-	place8, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 324)
+			return ctx.JSON(http.StatusBadRequest, err.Error())
+		}
 
-	var route2 models.Route
-	route2.Places = append(route2.Places, place5)
-	route2.Places = append(route2.Places, place6)
-	route2.Places = append(route2.Places, place7)
-	route2.Places = append(route2.Places, place8)
+		if isHaveAnimals {
+			param.Animals = 1
+		}
+	}
 
-	place9, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 2312)
-	place10, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 2265)
-	place11, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 428)
-	place12, _ := h.useCasePlace.GetPlaceById(ctx.Request().Context(), 3296)
+	kids := ctx.QueryParam("kids")
+	if kids != "" {
+		isHaveKids, err := strconv.ParseBool(kids)
+		if err != nil {
+			h.logger.WithError(errors.Wrap(err, "failed to parse owner param")).
+				Errorf("failed to get user events")
 
-	var route3 models.Route
-	route3.Places = append(route3.Places, place9)
-	route3.Places = append(route3.Places, place10)
-	route3.Places = append(route3.Places, place11)
-	route3.Places = append(route3.Places, place12)
+			return ctx.JSON(http.StatusBadRequest, err.Error())
+		}
 
-	var personalRoutes models.Routes
+		if isHaveKids {
+			param.Kids = 1
+		}
+	}
 
-	personalRoutes.Routes = append(personalRoutes.Routes, route3)
-	personalRoutes.Routes = append(personalRoutes.Routes, route2)
-	personalRoutes.Routes = append(personalRoutes.Routes, route1)
+	interestsString := ctx.QueryParam("interests")
+	if interestsString != "" {
+		param.Interests = strings.Split(interestsString, ",")
+	}
 
-	return ctx.JSON(http.StatusOK, personalRoutes)
+	personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), param)
+	if err != nil {
+		h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+	h.logger.Info(personalRoutes1)
+
+	return ctx.JSON(http.StatusOK, personalRoutes1)
 }

@@ -35,8 +35,9 @@ def hello():
     selected_df = my_filter.get_dataframe()
 
     model = RouteModel(selected_df, df, answer)
-
-    return model.get_routes()
+    routes = model.get_routes()
+    print(routes)
+    return routes
 
 
 if __name__ == "__main__":

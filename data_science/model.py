@@ -111,7 +111,7 @@ class RouteModel:
     def get_main_points_sorted(self, df):
 
         df['my_distance'] = df['coordinates'].apply(
-            lambda x: distance.cosine(x, self.answer['position']))
+            lambda x: distance.cosine(x, [55.8262103, 37.63772804]))
         df.sort_values(by='my_distance', inplace=True)
 
         return list(df['id'].values)
