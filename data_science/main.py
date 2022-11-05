@@ -3,7 +3,7 @@ import psycopg2
 
 from model import RouteModel
 from filter import Filtering
-from flask import Flask
+from flask import Flask, request
 
 
 class DB:
@@ -25,16 +25,9 @@ class DB:
 db = DB()
 app = Flask(__name__)
 
-@app.route("/routes/personal")
+@app.route("/routes/personal", methods=['POST'])
 def hello():
-    answer = {'with': 'Один',
-              'animals': 0,
-              'kids': 0,
-              'interests': ['activity', 'nature', 'science', 'national', 'workshop',
-                            'creation', 'kids', 'tech', 'about_russia'],
-              'transport': 'Пешком',
-              'position': [55.8262103, 37.63772804]
-              }
+    answer = request.get_json(force=True)
 
     df = db.get_df()
 
