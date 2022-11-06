@@ -64,7 +64,8 @@ class Filtering:
         elif self.answer['with'] == 'Семьей':
             self.df = self.df.loc[self.df['family_flag'] == 1]
 
-        self.df = self.df.loc[self.df.apply(self.filter_interests, args=[self.answer['interests']], axis=1) == 1]
+        self.df.loc[self.df.apply(self.filter_interests, args=[self.answer['interests']], axis=1) == 1, 'ord'] = 100
+        self.df['ord'].fillna(200)
 
         self.df['time_flag'] = self.df['work_schedule'].apply(self.get_time_flag)
 

@@ -52,7 +52,15 @@ class RouteModel:
 
             recommend['distance_' + vector_to_compare] = [distance.cosine(mean_vector, point_vector)
                                                           for point_vector in recommend[vector_to_compare].values]
-        distance_coef = 10
+        distance_coef = 10 ** 2
+        title_coef = 0.1
+        text_coef = 1
+
+        if route.loc[route['type_place'].isin(['Детская площадка', 'Зеленая зона',
+                                               'Фонтаны'])].shape[0] / route.shape[0] >= 0.5:
+            distance_coef = 10 ** 10
+            title_coef = 0
+            text_coef = 0.001
 
         if self.answer['transport'] in ['Велосипед', 'Общественный транспорт']:
             distance_coef = 0.2
@@ -60,17 +68,20 @@ class RouteModel:
         elif self.answer['transport'] == 'Самокат':
             distance_coef = 0.5
 
-        recommend['distance'] = recommend['distance_vector_title'] / 10 \
-                                + recommend['distance_vector_text'] \
+        recommend['distance'] = recommend['distance_vector_title'] * title_coef \
+                                + recommend['distance_vector_text'] * text_coef \
                                 + recommend['distance_coordinates'] * distance_coef
 
-        recommend.sort_values(by='distance', ascending=True, inplace=True)
+        if route.loc[route['type_place']=='Детская площадка'].shape[0] / route.shape[0] >= 0.4:
+            recommend.loc[recommend['type_place'] == 'Детская площадка', 'ord'] *= 5
+
+        recommend.sort_values(by=['ord', 'distance'], ascending=True, inplace=True)
 
         return recommend.head(1)
 
     def get_route(self, corpus, n_points=10):
 
-        route = corpus.sort_values(by=['rating']).head(10).sample(1)
+        route = corpus.sort_values(by=['ord', 'rating']).head(5).sample(1)
 
         for _ in range(n_points - 1):
             route = pd.concat([route, self.get_closest_point(route, corpus)])
@@ -96,17 +107,23 @@ class RouteModel:
 
         if self.answer['transport'] == 'Велосипед':
             n_points = [10]
+            proba = [1.0]
         elif self.answer['animals'] == 1:
             n_points = [8]
+            proba = [1.0]
         else:
-            n_points = [3, 4, 5]
+            n_points = [3, 4]
+            proba = [0.2, 0.8]
 
         while len(raw_routes) < 3:
 
             if tmp.shape[0] < max(n_points) // 2:
                 break
+            if tmp.shape[0] <= 6:
+                n_points = [3]
+                proba = [1.0]
 
-            full_route = self.get_route(tmp, n_points=np.random.choice(n_points))
+            full_route = self.get_route(tmp, n_points=np.random.choice(n_points, p=proba))
 
             raw_routes.append(full_route)
             tmp = tmp[~tmp['id'].isin(
