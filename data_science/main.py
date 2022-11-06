@@ -27,7 +27,6 @@ app = Flask(__name__)
 
 @app.route("/routes/personal", methods=['POST'])
 def hello():
-
     answer = request.get_json(force=True)
 
     #answer = {'with': 'Компанией',
@@ -42,6 +41,8 @@ def hello():
     my_filter = Filtering(df, answer)
     selected_df = my_filter.get_dataframe()
 
+    if selected_df.shape[0] < 1:
+        return []
     model = RouteModel(selected_df, df, answer)
     routes = model.get_routes()
     return json.dumps({"routes": routes}, cls=NpEncoder)

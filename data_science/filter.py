@@ -51,6 +51,9 @@ class Filtering:
         if self.answer['kids'] == 1:
             self.df = self.df.loc[self.df['children_flag'] == 1]
 
+        if self.answer['transport'] == '' or self.answer['transport'] is None or len(self.answer['transport']) == 0:
+            pass
+
         if self.answer['transport'] == 'Общественный транспорт':
             self.df = self.df.loc[self.df['electrobus_flag'] == 1]
 
@@ -60,14 +63,20 @@ class Filtering:
         elif self.answer['transport'] == 'Велосипед':
             self.df = self.df.loc[self.df['bike_flag'] == 1]
 
-        if self.answer['with'] == 'Пара':
+        if self.answer['with'] == '' or self.answer['with'] is None or len(self.answer['with']) == 0:
+            pass
+
+        elif self.answer['with'] == 'Пара':
             self.df = self.df.loc[self.df['date_flag'] == 1]
 
         elif self.answer['with'] == 'Семьей':
             self.df = self.df.loc[self.df['family_flag'] == 1]
 
-        self.df.loc[self.df.apply(self.filter_interests, args=[self.answer['interests']], axis=1) == 1, 'ord'] = 100
-        self.df['ord'].fillna(200)
+        if self.answer['interests'] == '' or self.answer['interests'] is None or len(self.answer['interests']) == 0:
+            self.df['ord'] = 200
+        else:
+            self.df.loc[self.df.apply(self.filter_interests, args=[self.answer['interests']], axis=1) == 1, 'ord'] = 100
+            self.df['ord'].fillna(200)
 
         self.df['time_flag'] = self.df['work_schedule'].apply(self.get_time_flag)
 
