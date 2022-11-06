@@ -120,7 +120,7 @@ class RouteModel:
             if tmp.shape[0] < max(n_points) // 2:
                 break
             if tmp.shape[0] <= 6:
-                n_points = [3]
+                n_points = [min(n_points)]
                 proba = [1.0]
 
             full_route = self.get_route(tmp, n_points=np.random.choice(n_points, p=proba))
