@@ -70,11 +70,11 @@ func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
 		param.Interests = strings.Split(interestsString, ",")
 	}
 
-	personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), param)
-	if err != nil {
-		h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
-		return ctx.JSON(http.StatusInternalServerError, err)
-	}
+	//personalRoutes1, err := h.useCaseRoutes.GetPersonalRoutes(ctx.Request().Context(), param)
+	//if err != nil {
+	//	h.logger.WithError(err).Errorf("[GetPersonalRoutes] handler")
+	//	return ctx.JSON(http.StatusInternalServerError, err)
+	//}
 
-	return ctx.JSON(http.StatusOK, personalRoutes1)
+	return ctx.NoContent(http.StatusOK)
 }
