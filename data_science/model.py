@@ -88,15 +88,15 @@ class RouteModel:
 
         if self.answer['transport'] == 'Самокат':
             route = pd.concat(
-                [route, self.get_closest_services(route, 'Прокат', n_services=8)])
+                [route, self.get_closest_services(route, 'Прокат', n_services=5)])
         elif self.answer['transport'] == 'Общественный транспорт':
             route = pd.concat([route, self.get_closest_services(
-                route, 'Остановка', n_services=8)])
+                route, 'Остановка', n_services=5)])
 
         route = pd.concat([route, self.get_closest_services(
-            route, service_name='Еда', n_services=10)])
+            route, service_name='Еда', n_services=6)])
         route = pd.concat([route, self.get_closest_services(
-            route, service_name='Туалеты', n_services=10)])
+            route, service_name='Туалеты', n_services=5)])
 
         return route
 
