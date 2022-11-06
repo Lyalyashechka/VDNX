@@ -1,0 +1,45 @@
+@use 'src/configurations/theme' as theme;
+
+.invite-to-loyalty-program {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px 20px 20px;
+  //height: 23%;
+  background: theme.$sideMapBlocksBG;
+  border-radius: 4px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &__side-panel {
+    display: flex;
+    flex-direction: column;
+    align-content: start;
+
+    & > img {
+      cursor: pointer;
+    }
+  }
+}
+
+.content {
+  &__header {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    letter-spacing: 0.1px;
+    color: #000000;
+  }
+  &__invitation {
+    width: 80%;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

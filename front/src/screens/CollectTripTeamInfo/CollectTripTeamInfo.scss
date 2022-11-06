@@ -1,0 +1,39 @@
+@use 'src/configurations/theme' as theme;
+
+.trip-team-info > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin choice-block-base {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  max-width: 86%;
+  @media screen and (min-width: 500px){
+    max-width: 45%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  margin-bottom: 35px;
+  margin-top: 4%;
+  gap: 15px;
+}
+
+.trip-team-info {
+  &__choice-block {
+    &_main, &_additional {
+      @include choice-block-base;
+    }
+  }
+  &__subtitle {
+    color: theme.$questionnaireSubtitle;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 140%;
+    margin-bottom: 20px;
+  }
+}
