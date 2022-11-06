@@ -76,5 +76,5 @@ func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
 	//	return ctx.JSON(http.StatusInternalServerError, err)
 	//}
 
-	return ctx.NoContent(http.StatusOK)
+	return ctx.JSON(http.StatusOK, "hello")
 }
