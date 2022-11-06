@@ -88,15 +88,15 @@ class RouteModel:
 
         if self.answer['transport'] == 'Самокат':
             route = pd.concat(
-                [route, self.get_closest_services(route, 'Прокат', n_services=8)])
+                [route, self.get_closest_services(route, 'Прокат', n_services=5)])
         elif self.answer['transport'] == 'Общественный транспорт':
             route = pd.concat([route, self.get_closest_services(
-                route, 'Остановка', n_services=8)])
+                route, 'Остановка', n_services=5)])
 
         route = pd.concat([route, self.get_closest_services(
-            route, service_name='Еда', n_services=10)])
+            route, service_name='Еда', n_services=6)])
         route = pd.concat([route, self.get_closest_services(
-            route, service_name='Туалеты', n_services=10)])
+            route, service_name='Туалеты', n_services=5)])
 
         return route
 
@@ -120,7 +120,7 @@ class RouteModel:
             if tmp.shape[0] < max(n_points) // 2:
                 break
             if tmp.shape[0] <= 6:
-                n_points = [3]
+                n_points = [min(n_points)]
                 proba = [1.0]
 
             full_route = self.get_route(tmp, n_points=np.random.choice(n_points, p=proba))
