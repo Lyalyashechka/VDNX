@@ -26,11 +26,11 @@ app = Flask(__name__)
 
 @app.route("/routes/personal")
 def hello():
-    answer = {'with': 'Компанией',
-              'animals': 1,
+    answer = {'with': 'Семьей',
+              'animals': 0,
               'kids': 1,
-              'interests': ['promenade'],
-              'transport': 'Общественный транспорт'
+              'interests': ['kids'],
+              'transport': 'Пешком'
               }
 
     df = db.get_df()
@@ -38,6 +38,8 @@ def hello():
     my_filter = Filtering(df, answer)
     selected_df = my_filter.get_dataframe()
 
+    if selected_df.shape[0] < 1:
+        return []
     model = RouteModel(selected_df, df, answer)
     res = model.get_routes()
 
