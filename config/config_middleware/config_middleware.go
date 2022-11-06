@@ -13,6 +13,18 @@ var (
 	exposeHeaders = []string{"Authorization"}
 )
 
+func Recover(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(context echo.Context) error {
+		defer func() {
+			if err := recover(); err != nil {
+				context.NoContent(http.StatusInternalServerError)
+			}
+		}()
+
+		return next(context)
+	}
+}
+
 func GetCORSConfigStruct() middleware.CORSConfig {
 	return middleware.CORSConfig{
 		AllowOrigins:     allowOrigins,
@@ -25,6 +37,7 @@ func GetCORSConfigStruct() middleware.CORSConfig {
 
 func ConfigMiddleware(router *echo.Echo) {
 	router.Use(
+		Recover,
 		middleware.CORSWithConfig(GetCORSConfigStruct()),
 	)
 }
