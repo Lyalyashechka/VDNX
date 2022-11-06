@@ -34,7 +34,7 @@ func (h *Handler) GetPersonalRoutes(ctx echo.Context) error {
 
 	transport := ctx.QueryParam("transport")
 	param.Transport = transport
-
+	h.logger.Info(ctx.QueryParams())
 	animals := ctx.QueryParam("animals")
 	if animals != "" {
 		isHaveAnimals, err := strconv.ParseBool(animals)
