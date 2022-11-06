@@ -27,7 +27,15 @@ app = Flask(__name__)
 
 @app.route("/routes/personal", methods=['POST'])
 def hello():
+
     answer = request.get_json(force=True)
+
+    #answer = {'with': 'Компанией',
+    #          'animals': 1,
+    #          'kids': 1,
+    #          'interests': ['promenade'],
+    #          'transport': 'Общественный транспорт'
+    #          }
 
     df = db.get_df()
 
