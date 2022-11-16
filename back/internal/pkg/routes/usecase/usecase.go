@@ -72,7 +72,7 @@ func (uc *UseCase) TraceSubPointRoutes(ctx context.Context, firstPoint models.Po
 
 		for _, v := range placeNearPoint {
 			isExist := false
-			for _, v1 := range placeNearPoint {
+			for _, v1 := range ret {
 				if v.Id == v1.Id {
 					isExist = true
 					break
